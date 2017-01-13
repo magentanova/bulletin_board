@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
 const renderFile = require('ejs').renderFile
+const cors = require('cors')
 
 // Load Configuration
 const appMiddleWare = require('./config/middleware.js')
@@ -79,6 +80,8 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+app.use(cors())
 
 app.listen(PORT,function() {
   console.log('\n\n===== listening for requests on port ' + PORT + ' =====\n\n')
