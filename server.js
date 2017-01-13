@@ -48,6 +48,15 @@ connectToDB(PROJECT_NAME)
 // =========
 // APPLICATION MIDDLEWARE 
 // =========
+
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
+app.use(appMiddleWare.errorHandler);
+
 app.use( express.static( __dirname + '/dist/assets') );
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded() );
@@ -73,12 +82,7 @@ routers.forEach(function(router) {
 	app.use ( '/api', router )
 })
 
-app.use(appMiddleWare.errorHandler);
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  next();
-});
 
 app.use(cors())
 
