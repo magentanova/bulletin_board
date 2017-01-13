@@ -1,0 +1,104 @@
+swagger: '2.0'
+info:
+  description: This documentation describes how to use endpoints for the TIY Bulletin Board REST API and allows you to test them out. 
+  version: 1.0.0
+  title: REST API for TIY Bulletin Board
+  # put the contact info for your development or API team
+  contact:
+    email: houston@theironyard.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# all paths will be relative to the basePath specified
+# basePath: /v1
+
+# tags are used for organizing operations
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+schemes:
+- https
+paths:
+  /bulletin:
+    get:
+      tags:
+      - developers
+      summary: get all bulletins
+      operationId: fetchBulletins
+      description: |
+        gets all bulletins that have ever been posted to the app
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: title
+        description: pass an optional filter string for looking up bulletins by title
+        required: false
+        type: string
+      - in: query
+        name: content
+        description: pass an optional search string for looking up bulletins by content
+        required: false
+        type: string
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/bulletin'
+        400:
+          description: bad input parameter
+    post:
+      tags:
+      - developers
+      summary: add a bulletin
+      operationId: addBulletin
+      description: add a new bulletin to the board
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: bulletin
+        description: an object representing a bulletin you want to post to the board
+        required: true
+        schema:
+          $ref: '#/definitions/bulletin'
+      responses:
+        201:
+          description: item created
+        400:
+          description: invalid input, object invalid
+        409:
+          description: an existing item already exists
+definitions:
+  bulletin:
+    type: object
+    required:
+    - title
+    - content
+    properties:
+      title: 
+        type: string
+      content:
+        type: string
+      signed: 
+        type: string
+      imageURL: 
+        type: string
+      _id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      createdAt:
+        type: string
+        example: 2016-08-29T09:12:33.001Z
+
+host: tiy-bulletin-board.herokuapp.com
+basePath: /api
