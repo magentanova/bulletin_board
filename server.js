@@ -49,9 +49,11 @@ connectToDB(PROJECT_NAME)
 // APPLICATION MIDDLEWARE 
 // =========
 
+app.use(cors())
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "DELETE,GET,POST,PUT")
   next();
 });
 
@@ -81,10 +83,6 @@ var routers = files.map(file => require(`${apiDir}/${file}`) );
 routers.forEach(function(router) {
 	app.use ( '/api', router )
 })
-
-
-
-app.use(cors())
 
 app.listen(PORT,function() {
   console.log('\n\n===== listening for requests on port ' + PORT + ' =====\n\n')
